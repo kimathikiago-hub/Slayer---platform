@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Slayer Platform</title>
+    <style>
+        body { background: #0b0e11; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .card { background: #1e2329; padding: 20px; border-radius: 10px; border: 1px solid #f0b90b; display: inline-block; margin-top: 20px; }
+        .signal { font-size: 28px; font-weight: bold; color: #f0b90b; margin: 20px 0; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .box { background: #2b2f36; padding: 10px; border-radius: 5px; font-size: 14px; }
+        .count { color: #0ecb81; font-size: 18px; display: block; }
+    </style>
+</head>
+<body>
+    <h1>SLAYER DASHBOARD</h1>
+    <div id="signal" class="signal">CONNECTING...</div>
+    <div class="card">
+        <h3>Digit Neglect (Last 50 Ticks)</h3>
+        <div id="neglect" class="grid"></div>
+    </div>
+
+    <script>
+        async function update() {
+            try {
+                const res = await fetch('/live-data');
+                const data = await response.json();
+                document.getElementById('signal').innerText = data.signal;
+                let html = '';
+                for (let i=0; i<10; i++) {
+                    html += `<div class="box">Digit ${i}<span class="count">${data.neglect[i]}</span></div>`;
+                }
+                document.getElementById('neglect').innerHTML = html;
+            } catch (e) {}
+        }
+        setInterval(update, 1000);
+    </script>
+</body>
+</html>
